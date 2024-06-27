@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Weather {
@@ -76,19 +77,16 @@ class Main {
 class Wind {
   num speed;
   num deg;
-  num gust;
 
   Wind({
     required this.speed,
     required this.deg,
-    required this.gust,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'speed': speed,
       'deg': deg,
-      'gust': gust,
     };
   }
 
@@ -96,7 +94,6 @@ class Wind {
     return Wind(
       speed: map['speed'] as num,
       deg: map['deg'] as num,
-      gust: map['gust'] as num,
     );
   }
 
@@ -160,4 +157,37 @@ class WeatherData {
 
   factory WeatherData.fromJson(String source) =>
       WeatherData.fromMap(json.decode(source));
+}
+
+class WeatherDetail {
+  Main main;
+  Weather weather;
+  String dt_txt;
+
+  WeatherDetail({
+    required this.main,
+    required this.weather,
+    required this.dt_txt,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'main': main.toMap(),
+      'weather': weather.toMap(),
+      'dt_txt': dt_txt,
+    };
+  }
+
+  factory WeatherDetail.fromMap(Map<String, dynamic> map) {
+    return WeatherDetail(
+      main: Main.fromMap(map['main'] as Map<String, dynamic>),
+      weather: Weather.fromMap(map['weather'][0] as Map<String, dynamic>),
+      dt_txt: map['dt_txt'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory WeatherDetail.fromJson(String source) =>
+      WeatherDetail.fromMap(json.decode(source) as Map<String, dynamic>);
 }
